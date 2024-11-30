@@ -1,6 +1,6 @@
 using System;
-using System.IO;
 using NUnit.Framework;
+using Refactor.TaskListKata;
 
 namespace Tasks
 {

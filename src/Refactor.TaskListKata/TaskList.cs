@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Tasks
+namespace Refactor.TaskListKata
 {
 	public sealed class TaskList
 	{

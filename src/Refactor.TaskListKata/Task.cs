@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Tasks
+namespace Refactor.TaskListKata
 {
 	public class Task
 	{

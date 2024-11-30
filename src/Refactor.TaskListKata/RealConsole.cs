@@ -1,6 +1,6 @@
 using System;
 
-namespace Tasks
+namespace Refactor.TaskListKata
 {
 	public class RealConsole : IConsole
 	{
