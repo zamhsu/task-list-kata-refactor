@@ -1,5 +1,7 @@
-﻿using Refactor.TaskListKata.Entity;
+﻿using Refactor.TaskListKata.Adapter.Repository;
+using Refactor.TaskListKata.Entity;
 using Refactor.TaskListKata.UseCase;
+using Refactor.TaskListKata.UseCase.Port.Out;
 
 namespace Refactor.TaskListKata;
 
@@ -10,6 +12,7 @@ public sealed class TaskList
 
     private readonly ToDoList toDoList = new ToDoList(new ToDoListId(DEFAULT_TO_DO_LIST_ID));
     private readonly IConsole console;
+    private readonly IToDoListRepository repository;
     
     public static void Main(string[] args)
     {
@@ -19,6 +22,12 @@ public sealed class TaskList
     public TaskList(IConsole console)
     {
         this.console = console;
+        repository = new ToDoListInMemoryRepository();
+
+        if (repository.FindById(new ToDoListId(DEFAULT_TO_DO_LIST_ID)) is null)
+        {
+            repository.Save(toDoList);
+        }
     }
 
     public void Run()
@@ -32,7 +41,7 @@ public sealed class TaskList
                 break;
             }
 
-            new ExecuteUseCase(toDoList, console).Execute(command);
+            new ExecuteUseCase(toDoList, console, repository).Execute(command);
         }
     }
 }

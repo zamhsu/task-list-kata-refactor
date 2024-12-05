@@ -1,4 +1,5 @@
 using Refactor.TaskListKata.Entity;
+using Refactor.TaskListKata.UseCase.Port.Out;
 
 namespace Refactor.TaskListKata.UseCase;
 
@@ -6,11 +7,13 @@ public class ExecuteUseCase
 {
     private readonly ToDoList _toDoList;
     private readonly IConsole _console;
+    private readonly IToDoListRepository _repository;
 
-    public ExecuteUseCase(ToDoList toDoList, IConsole console)
+    public ExecuteUseCase(ToDoList toDoList, IConsole console, IToDoListRepository repository)
     {
         _toDoList = toDoList;
         _console = console;
+        _repository = repository;
     }
     
     public void Execute(string commandLine)
@@ -23,7 +26,7 @@ public class ExecuteUseCase
                 new ShowUseCase(_toDoList, _console).Show();
                 break;
             case "add":
-                new AddUseCase(_toDoList, _console).Add(commandRest[1]);
+                new AddUseCase(_toDoList, _console, _repository).Add(commandRest[1]);
                 break;
             case "check":
                 Check(commandRest[1]);
