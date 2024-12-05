@@ -1,5 +1,6 @@
 using Refactor.TaskListKata.Entity;
 using Refactor.TaskListKata.UseCase.Port.In.Project.Add;
+using Refactor.TaskListKata.UseCase.Port.In.Task.Add;
 using Refactor.TaskListKata.UseCase.Port.Out;
 using Refactor.TaskListKata.UseCase.Service;
 
@@ -33,20 +34,14 @@ public class AddUseCase
         else if (subcommand == "task")
         {
             var projectTask = subcommandRest[1].Split(" ".ToCharArray(), 2);
-            AddTask(new ProjectName(projectTask[0]), projectTask[1]);
+            
+            IAddTaskUseCase addTaskUseCase = new AddTaskService(_repository, _console);
+            var addTaskInput = new AddTaskInput();
+            addTaskInput.ToDoListId = TaskList.DEFAULT_TO_DO_LIST_ID;
+            addTaskInput.ProjectName = projectTask[0];
+            addTaskInput.Description = projectTask[1];
+            addTaskInput.Done = false;
+            addTaskUseCase.Execute(addTaskInput);
         }
-    }
-
-    private void AddTask(ProjectName projectName, string description)
-    {
-        var projectTasks = _toDoList.GetTasks(projectName);
-
-        if (projectTasks is null)
-        {
-            _console.WriteLine("Could not find a project with the name \"{0}\".", projectName);
-            return;
-        }
-
-        _toDoList.AddTask(projectName, description, false);
     }
 }
