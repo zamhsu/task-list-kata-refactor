@@ -4,7 +4,7 @@ namespace Refactor.TaskListKata.Entity;
 
 public class ProjectName : ValueObject<ProjectName>
 {
-    private string Value { get; }
+    public string Value { get; }
 
     public ProjectName(string value)
     {

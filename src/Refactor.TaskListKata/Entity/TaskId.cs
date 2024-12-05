@@ -4,7 +4,7 @@ namespace Refactor.TaskListKata.Entity;
 
 public class TaskId : ValueObject<TaskId>
 {
-    private string Value { get; }
+    public string Value { get; }
 
     public TaskId(long value)
     {

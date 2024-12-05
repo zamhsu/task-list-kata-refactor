@@ -4,7 +4,7 @@ namespace Refactor.TaskListKata.Entity;
 
 public class ToDoListId : ValueObject<ToDoListId>
 {
-    private string Value { get; }
+    public string Value { get; }
 
     public ToDoListId(string value)
     {
