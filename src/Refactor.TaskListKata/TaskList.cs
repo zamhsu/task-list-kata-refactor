@@ -10,9 +10,9 @@ public sealed class TaskList
     private const string QUIT = "quit";
     public const string DEFAULT_TO_DO_LIST_ID = "001";
 
-    private readonly ToDoList toDoList = new ToDoList(new ToDoListId(DEFAULT_TO_DO_LIST_ID));
-    private readonly IConsole console;
-    private readonly IToDoListRepository repository;
+    private readonly ToDoList _toDoList = new ToDoList(new ToDoListId(DEFAULT_TO_DO_LIST_ID));
+    private readonly IConsole _console;
+    private readonly IToDoListRepository _repository;
     
     public static void Main(string[] args)
     {
@@ -21,12 +21,12 @@ public sealed class TaskList
 
     public TaskList(IConsole console)
     {
-        this.console = console;
-        repository = new ToDoListInMemoryRepository();
+        _console = console;
+        _repository = new ToDoListInMemoryRepository();
 
-        if (repository.FindById(new ToDoListId(DEFAULT_TO_DO_LIST_ID)) is null)
+        if (_repository.FindById(new ToDoListId(DEFAULT_TO_DO_LIST_ID)) is null)
         {
-            repository.Save(toDoList);
+            _repository.Save(_toDoList);
         }
     }
 
@@ -34,14 +34,14 @@ public sealed class TaskList
     {
         while (true)
         {
-            console.Write("> ");
-            var command = console.ReadLine();
+            _console.Write("> ");
+            var command = _console.ReadLine();
             if (command == QUIT)
             {
                 break;
             }
 
-            new ExecuteUseCase(toDoList, console, repository).Execute(command);
+            new ExecuteUseCase(_toDoList, _console, _repository).Execute(command);
         }
     }
 }
