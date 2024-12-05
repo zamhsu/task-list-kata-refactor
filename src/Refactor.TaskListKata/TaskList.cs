@@ -6,7 +6,7 @@ namespace Refactor.TaskListKata;
 public sealed class TaskList
 {
     private const string QUIT = "quit";
-    private const string DEFAULT_TO_DO_LIST_ID = "001";
+    public const string DEFAULT_TO_DO_LIST_ID = "001";
 
     private readonly ToDoList toDoList = new ToDoList(new ToDoListId(DEFAULT_TO_DO_LIST_ID));
     private readonly IConsole console;
