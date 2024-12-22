@@ -1,7 +1,9 @@
+using Refactor.TaskListKata.Adapter.Presenter;
 using Refactor.TaskListKata.Entity;
 using Refactor.TaskListKata.UseCase.Port.In.Project.Add;
 using Refactor.TaskListKata.UseCase.Port.In.Task.Add;
 using Refactor.TaskListKata.UseCase.Port.In.Task.SetDone;
+using Refactor.TaskListKata.UseCase.Port.In.ToDoList.Help;
 using Refactor.TaskListKata.UseCase.Port.Out;
 using Refactor.TaskListKata.UseCase.Service;
 
@@ -39,7 +41,8 @@ public class ExecuteUseCase
                 SetDone(commandRest[1], false);
                 break;
             case "help":
-                new HelpUseCase(_console).Help();
+                IHelpUseCase helpUseCase = new HelpService(new HelpConsolePresenter(_console));
+                helpUseCase.Execute();
                 break;
             default:
                 new ErrorUseCase(_console).Error(command);
