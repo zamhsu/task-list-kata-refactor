@@ -4,6 +4,7 @@ using Refactor.TaskListKata.UseCase.Port.In.Project.Add;
 using Refactor.TaskListKata.UseCase.Port.In.Task.Add;
 using Refactor.TaskListKata.UseCase.Port.In.Task.SetDone;
 using Refactor.TaskListKata.UseCase.Port.In.ToDoList.Help;
+using Refactor.TaskListKata.UseCase.Port.In.ToDoList.Show;
 using Refactor.TaskListKata.UseCase.Port.Out;
 using Refactor.TaskListKata.UseCase.Service;
 
@@ -29,7 +30,10 @@ public class ExecuteUseCase
         switch (command)
         {
             case "show":
-                new ShowUseCase(_toDoList, _console).Show();
+                IShowUseCase showUseCase = new ShowService(_repository, new ShowConsolePresenter(_console));
+                var showInput = new ShowInput();
+                showInput.ToDoListId = _toDoList.GetId().ToString();
+                showUseCase.Execute(showInput);
                 break;
             case "add":
                 Add(commandRest[1]);
