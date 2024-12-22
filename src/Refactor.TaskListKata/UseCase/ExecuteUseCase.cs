@@ -3,6 +3,7 @@ using Refactor.TaskListKata.Entity;
 using Refactor.TaskListKata.UseCase.Port.In.Project.Add;
 using Refactor.TaskListKata.UseCase.Port.In.Task.Add;
 using Refactor.TaskListKata.UseCase.Port.In.Task.SetDone;
+using Refactor.TaskListKata.UseCase.Port.In.ToDoList.Error;
 using Refactor.TaskListKata.UseCase.Port.In.ToDoList.Help;
 using Refactor.TaskListKata.UseCase.Port.In.ToDoList.Show;
 using Refactor.TaskListKata.UseCase.Port.Out;
@@ -49,7 +50,10 @@ public class ExecuteUseCase
                 helpUseCase.Execute();
                 break;
             default:
-                new ErrorUseCase(_console).Error(command);
+                IErrorUseCase errorUseCase = new ErrorService(_console);
+                var errorInput = new ErrorInput();
+                errorInput.Command = command;
+                errorUseCase.Execute(errorInput);
                 break;
         }
     }
