@@ -1,5 +1,6 @@
 using System.Linq;
 using Refactor.TaskListKata.Entity;
+using Refactor.TaskListKata.UseCase.Port;
 using Refactor.TaskListKata.UseCase.Port.In.Task.SetDone;
 using Refactor.TaskListKata.UseCase.Port.Out;
 
@@ -8,12 +9,12 @@ namespace Refactor.TaskListKata.UseCase.Service;
 public class SetDoneService : ISetDoneUseCase
 {
     private readonly IToDoListRepository _repository;
-    private readonly IConsole _console;
+    private readonly ISystemErrorPresenter _systemErrorPresenter;
 
-    public SetDoneService(IToDoListRepository repository, IConsole console)
+    public SetDoneService(IToDoListRepository repository, ISystemErrorPresenter systemErrorPresenter)
     {
         _repository = repository;
-        _console = console;
+        _systemErrorPresenter = systemErrorPresenter;
     }
 
     public void Execute(SetDoneInput input)
@@ -27,7 +28,9 @@ public class SetDoneService : ISetDoneUseCase
             .FirstOrDefault(task => task != null);
 			
         if (identifiedTask == null) {
-            _console.WriteLine("Could not find a task with an ID of {0}.", taskId);
+            var systemErrorDto = new SystemErrorDto();
+            systemErrorDto.Message = $"Could not find a task with an ID of {taskId}.";
+            _systemErrorPresenter.Present(systemErrorDto);
             return;
         }
 

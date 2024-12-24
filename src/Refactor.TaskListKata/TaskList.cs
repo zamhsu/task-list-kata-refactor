@@ -1,8 +1,9 @@
-﻿using Refactor.TaskListKata.Adapter.Controller;
+﻿using Refactor.TaskListKata.Adapter.Console;
+using Refactor.TaskListKata.Adapter.Controller;
 using Refactor.TaskListKata.Adapter.Presenter;
 using Refactor.TaskListKata.Adapter.Repository;
 using Refactor.TaskListKata.Entity;
-using Refactor.TaskListKata.UseCase;
+using Refactor.TaskListKata.IO.Console;
 using Refactor.TaskListKata.UseCase.Port.In.Project.Add;
 using Refactor.TaskListKata.UseCase.Port.In.Task.Add;
 using Refactor.TaskListKata.UseCase.Port.In.Task.SetDone;
@@ -46,10 +47,10 @@ public sealed class TaskList
             
             _showUseCase = new ShowService(_repository, new ShowConsolePresenter(_console));
             _addProjectUseCase = new AddProjectService(_repository);
-            _addTaskUseCase = new AddTaskService(_repository, _console);
-            _setDoneUseCase = new SetDoneService(_repository, _console);
+            _addTaskUseCase = new AddTaskService(_repository, new SystemErrorConsolePresenter(_console));
+            _setDoneUseCase = new SetDoneService(_repository, new SystemErrorConsolePresenter(_console));
             _helpUseCase = new HelpService(new HelpConsolePresenter(_console));
-            _errorUseCase = new ErrorService(_console);
+            _errorUseCase = new ErrorService(new ErrorConsolePresenter(_console));
         }
     }
 

@@ -1,18 +1,22 @@
 using Refactor.TaskListKata.UseCase.Port.In.ToDoList.Error;
+using Refactor.TaskListKata.UseCase.Port.Out;
 
 namespace Refactor.TaskListKata.UseCase.Service;
 
 public class ErrorService : IErrorUseCase
 {
-    private readonly IConsole _console;
+    private readonly IErrorPresenter _presenter;
 
-    public ErrorService(IConsole console)
+    public ErrorService(IErrorPresenter presenter)
     {
-        _console = console;
+        _presenter = presenter;
     }
-
+    
     public void Execute(ErrorInput input)
     {
-        _console.WriteLine("I don't know what the command \"{0}\" is.", input.Command);
+        var errorDto = new ErrorDto();
+        errorDto.Message = $"I don't know what the command \"{input.Command}\" is.";
+        
+        _presenter.Present(errorDto);
     }
 }

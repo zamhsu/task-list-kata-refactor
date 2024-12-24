@@ -1,5 +1,5 @@
 using System.IO;
-using Refactor.TaskListKata;
+using Refactor.TaskListKata.Adapter.Console;
 
 namespace Tasks
 {
