@@ -1,27 +1,34 @@
-using Refactor.TaskListKata.Adapter.Presenter;
-using Refactor.TaskListKata.Entity;
 using Refactor.TaskListKata.UseCase.Port.In.Project.Add;
 using Refactor.TaskListKata.UseCase.Port.In.Task.Add;
 using Refactor.TaskListKata.UseCase.Port.In.Task.SetDone;
 using Refactor.TaskListKata.UseCase.Port.In.ToDoList.Error;
 using Refactor.TaskListKata.UseCase.Port.In.ToDoList.Help;
 using Refactor.TaskListKata.UseCase.Port.In.ToDoList.Show;
-using Refactor.TaskListKata.UseCase.Port.Out;
-using Refactor.TaskListKata.UseCase.Service;
 
-namespace Refactor.TaskListKata.UseCase;
+namespace Refactor.TaskListKata.Adapter.Controller;
 
-public class ExecuteUseCase
+public class ToDoListConsoleController
 {
-    private readonly ToDoList _toDoList;
-    private readonly IConsole _console;
-    private readonly IToDoListRepository _repository;
-
-    public ExecuteUseCase(ToDoList toDoList, IConsole console, IToDoListRepository repository)
+    private readonly IShowUseCase _showUseCase;
+    private readonly IAddProjectUseCase _addProjectUseCase;
+    private readonly IAddTaskUseCase _addTaskUseCase;
+    private readonly ISetDoneUseCase _setDoneUseCase;
+    private readonly IHelpUseCase _helpUseCase;
+    private readonly IErrorUseCase _errorUseCase;
+    
+    public ToDoListConsoleController(IShowUseCase showUseCase, 
+                                     IAddProjectUseCase addProjectUseCase, 
+                                     IAddTaskUseCase addTaskUseCase, 
+                                     ISetDoneUseCase setDoneUseCase, 
+                                     IHelpUseCase helpUseCase, 
+                                     IErrorUseCase errorUseCase)
     {
-        _toDoList = toDoList;
-        _console = console;
-        _repository = repository;
+        _showUseCase = showUseCase;
+        _addProjectUseCase = addProjectUseCase;
+        _addTaskUseCase = addTaskUseCase;
+        _setDoneUseCase = setDoneUseCase;
+        _helpUseCase = helpUseCase;
+        _errorUseCase = errorUseCase;
     }
     
     public void Execute(string commandLine)
@@ -31,10 +38,9 @@ public class ExecuteUseCase
         switch (command)
         {
             case "show":
-                IShowUseCase showUseCase = new ShowService(_repository, new ShowConsolePresenter(_console));
                 var showInput = new ShowInput();
-                showInput.ToDoListId = _toDoList.GetId().ToString();
-                showUseCase.Execute(showInput);
+                showInput.ToDoListId = TaskList.DEFAULT_TO_DO_LIST_ID;
+                _showUseCase.Execute(showInput);
                 break;
             case "add":
                 Add(commandRest[1]);
@@ -46,14 +52,12 @@ public class ExecuteUseCase
                 SetDone(commandRest[1], false);
                 break;
             case "help":
-                IHelpUseCase helpUseCase = new HelpService(new HelpConsolePresenter(_console));
-                helpUseCase.Execute();
+                _helpUseCase.Execute();
                 break;
             default:
-                IErrorUseCase errorUseCase = new ErrorService(_console);
                 var errorInput = new ErrorInput();
-                errorInput.Command = command;
-                errorUseCase.Execute(errorInput);
+                errorInput.Command = commandLine;
+                _errorUseCase.Execute(errorInput);
                 break;
         }
     }
@@ -64,33 +68,30 @@ public class ExecuteUseCase
         var subcommand = subcommandRest[0];
         if (subcommand == "project")
         {
-            IAddProjectUseCase addProjectUseCase = new AddProjectService(_repository);
             var addProjectInput = new AddProjectInput();
             addProjectInput.ToDoListId = TaskList.DEFAULT_TO_DO_LIST_ID;
             addProjectInput.ProjectName = subcommandRest[1];
-            addProjectUseCase.Execute(addProjectInput);
+            _addProjectUseCase.Execute(addProjectInput);
         }
         else if (subcommand == "task")
         {
             var projectTask = subcommandRest[1].Split(" ".ToCharArray(), 2);
             
-            IAddTaskUseCase addTaskUseCase = new AddTaskService(_repository, _console);
             var addTaskInput = new AddTaskInput();
             addTaskInput.ToDoListId = TaskList.DEFAULT_TO_DO_LIST_ID;
             addTaskInput.ProjectName = projectTask[0];
             addTaskInput.Description = projectTask[1];
             addTaskInput.Done = false;
-            addTaskUseCase.Execute(addTaskInput);
+            _addTaskUseCase.Execute(addTaskInput);
         }
     }
 
     private void SetDone(string taskId, bool done)
     {
-        ISetDoneUseCase setDoneUseCase = new SetDoneService(_repository, _console);
         var setDoneInput = new SetDoneInput();
         setDoneInput.ToDoListId = TaskList.DEFAULT_TO_DO_LIST_ID;
         setDoneInput.TaskId = taskId;
         setDoneInput.Done = done;
-        setDoneUseCase.Execute(setDoneInput);
+        _setDoneUseCase.Execute(setDoneInput);
     }
 }
