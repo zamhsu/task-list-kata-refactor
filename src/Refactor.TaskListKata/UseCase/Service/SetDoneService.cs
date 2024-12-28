@@ -21,19 +21,14 @@ public class SetDoneService : ISetDoneUseCase
     {
         var taskId = new TaskId(input.TaskId);
         var toDoList = _repository.FindById(input.ToDoListId);
-        
-        var identifiedTask = toDoList
-            .GetProjects()
-            .Select(project => project.GetTasks().FirstOrDefault(task => task.GetId().Equals(taskId)))
-            .FirstOrDefault(task => task != null);
 			
-        if (identifiedTask == null) {
+        if (toDoList.ContainTask(taskId) is false) {
             var systemErrorDto = new SystemErrorDto();
             systemErrorDto.Message = $"Could not find a task with an ID of {taskId}.";
             _systemErrorPresenter.Present(systemErrorDto);
             return;
         }
 
-        identifiedTask.SetDone(input.Done);
+        toDoList.SetDone(taskId, input.Done);
     }
 }

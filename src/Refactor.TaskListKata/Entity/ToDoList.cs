@@ -56,6 +56,11 @@ public class ToDoList : AggregateRoot
         project.AddTask(new Task(new TaskId(NextTaskId()), description, done));
     }
 
+    public bool ContainTask(TaskId taskId)
+    {
+        return _projects.Any(project => project.ContainTask(taskId));
+    }
+
     public Project GetProject(ProjectName projectName)
     {
         return _projects.FirstOrDefault(project => project.GetName().Equals(projectName));
