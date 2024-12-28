@@ -5,9 +5,9 @@ namespace Refactor.TaskListKata.UseCase.Service;
 
 public class HelpService : IHelpUseCase
 {
-    private readonly IHelperPresenter _presenter;
+    private readonly IHelpPresenter _presenter;
 
-    public HelpService(IHelperPresenter presenter)
+    public HelpService(IHelpPresenter presenter)
     {
         _presenter = presenter;
     }

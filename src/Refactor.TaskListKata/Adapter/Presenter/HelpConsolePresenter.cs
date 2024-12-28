@@ -4,7 +4,7 @@ using Refactor.TaskListKata.UseCase.Port.Out;
 
 namespace Refactor.TaskListKata.Adapter.Presenter;
 
-public class HelpConsolePresenter : IHelperPresenter
+public class HelpConsolePresenter : IHelpPresenter
 {
     private readonly IConsole _console;
 
