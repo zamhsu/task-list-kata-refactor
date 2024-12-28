@@ -1,6 +1,10 @@
 using System;
 using NUnit.Framework;
-using Refactor.TaskListKata;
+using Refactor.TaskListKata.Adapter.Presenter;
+using Refactor.TaskListKata.Adapter.Repository;
+using Refactor.TaskListKata.Entity;
+using Refactor.TaskListKata.IO.Standard;
+using Refactor.TaskListKata.UseCase.Service;
 
 namespace Tasks
 {
@@ -16,7 +20,20 @@ namespace Tasks
 		public void StartTheApplication()
 		{
 			this.console = new FakeConsole();
-			var taskList = new TaskList(console);
+			var repository = new ToDoListInMemoryRepository();
+			repository.Save(new ToDoList(new ToDoListId(ToDoListApp.DEFAULT_TO_DO_LIST_ID)));
+			var systemErrorPresenter = new SystemErrorConsolePresenter(console);
+			var showPresenter = new ShowConsolePresenter(console);
+			var showUseCase = new ShowService(repository, showPresenter);
+			var addProjectUseCase = new AddProjectService(repository);
+			var addTaskUseCase = new AddTaskService(repository, systemErrorPresenter);
+			var setDoneUseCase = new SetDoneService(repository, systemErrorPresenter);
+			var helpPresenter = new HelpConsolePresenter(console);
+			var helpUseCase = new HelpService(helpPresenter);
+			var errorPresenter = new ErrorConsolePresenter(console);
+			var errorUseCase = new ErrorService(errorPresenter);
+			
+			var taskList = new ToDoListApp(console, showUseCase, addProjectUseCase, addTaskUseCase, setDoneUseCase, helpUseCase, errorUseCase);
 			this.applicationThread = new System.Threading.Thread(() => taskList.Run());
 			applicationThread.Start();
 		}
