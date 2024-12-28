@@ -1,3 +1,4 @@
+using Refactor.TaskListKata.IO.Standard;
 using Refactor.TaskListKata.UseCase.Port.In.Project.Add;
 using Refactor.TaskListKata.UseCase.Port.In.Task.Add;
 using Refactor.TaskListKata.UseCase.Port.In.Task.SetDone;
@@ -39,7 +40,7 @@ public class ToDoListConsoleController
         {
             case "show":
                 var showInput = new ShowInput();
-                showInput.ToDoListId = TaskList.DEFAULT_TO_DO_LIST_ID;
+                showInput.ToDoListId = ToDoListApp.DEFAULT_TO_DO_LIST_ID;
                 _showUseCase.Execute(showInput);
                 break;
             case "add":
@@ -69,7 +70,7 @@ public class ToDoListConsoleController
         if (subcommand == "project")
         {
             var addProjectInput = new AddProjectInput();
-            addProjectInput.ToDoListId = TaskList.DEFAULT_TO_DO_LIST_ID;
+            addProjectInput.ToDoListId = ToDoListApp.DEFAULT_TO_DO_LIST_ID;
             addProjectInput.ProjectName = subcommandRest[1];
             _addProjectUseCase.Execute(addProjectInput);
         }
@@ -78,7 +79,7 @@ public class ToDoListConsoleController
             var projectTask = subcommandRest[1].Split(" ".ToCharArray(), 2);
             
             var addTaskInput = new AddTaskInput();
-            addTaskInput.ToDoListId = TaskList.DEFAULT_TO_DO_LIST_ID;
+            addTaskInput.ToDoListId = ToDoListApp.DEFAULT_TO_DO_LIST_ID;
             addTaskInput.ProjectName = projectTask[0];
             addTaskInput.Description = projectTask[1];
             addTaskInput.Done = false;
@@ -89,7 +90,7 @@ public class ToDoListConsoleController
     private void SetDone(string taskId, bool done)
     {
         var setDoneInput = new SetDoneInput();
-        setDoneInput.ToDoListId = TaskList.DEFAULT_TO_DO_LIST_ID;
+        setDoneInput.ToDoListId = ToDoListApp.DEFAULT_TO_DO_LIST_ID;
         setDoneInput.TaskId = taskId;
         setDoneInput.Done = done;
         _setDoneUseCase.Execute(setDoneInput);
