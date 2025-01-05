@@ -13,17 +13,17 @@ public class ReadOnlyProject : Project
         _real = real;
     }
 
-    public List<Task> GetTasks()
+    public override List<Task> GetTasks()
     {
         return _real.GetTasks().Select(task => new ReadOnlyTask(task) as Task).ToList();
     }
 
-    public void SetTaskDone(TaskId taskId, bool done)
+    public override void SetTaskDone(TaskId taskId, bool done)
     {
         throw new InvalidOperationException("Read only.");
     }
 
-    public void AddTask(Task task)
+    public override void AddTask(Task task)
     {
         throw new InvalidOperationException("Read only.");
     }

@@ -28,7 +28,7 @@ public class Task
         return _done;
     }
 
-    public void SetDone(bool done)
+    public virtual void SetDone(bool done)
     {
         _done = done;
     }

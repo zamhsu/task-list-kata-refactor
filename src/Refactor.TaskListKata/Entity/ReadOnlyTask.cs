@@ -9,7 +9,7 @@ public class ReadOnlyTask : Task
         
     }
 
-    public void SetDone(bool done)
+    public override void SetDone(bool done)
     {
         throw new InvalidOperationException("Read only.");
     }

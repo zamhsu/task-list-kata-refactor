@@ -24,7 +24,7 @@ public class Project
         return _projectName;
     }
 
-    public List<Task> GetTasks()
+    public virtual List<Task> GetTasks()
     {
         return _tasks;
     }
@@ -34,12 +34,12 @@ public class Project
         return _tasks.Any(task => task.GetId().Equals(taskId));
     }
 
-    public void SetTaskDone(TaskId taskId, bool isDone)
+    public virtual void SetTaskDone(TaskId taskId, bool isDone)
     {
         _tasks.FirstOrDefault(task => task.GetId().Equals(taskId))?.SetDone(isDone);
     }
 
-    public void AddTask(Task task)
+    public virtual void AddTask(Task task)
     {
         _tasks.Add(task);
     }
